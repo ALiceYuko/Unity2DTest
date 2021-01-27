@@ -7,6 +7,10 @@ public class GameMgr : MonoBehaviour
     public static GameMgr g_GameMgr = null;
 
     public BoardMgr boardMgr;
+    public int playerFoodPoint = 100;
+
+    //目前是个回合制游戏，Player和Enemy交替移动
+    [HideInInspector] public bool playerTurn = true;
 
     private int level = 3;
 
@@ -36,9 +40,28 @@ public class GameMgr : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void GameOver()
     {
-        
+        enabled = false;
+    }
+
+    public void TurnOnOrOffPlayerTurn(bool bOn)
+    {
+        playerTurn = bOn;
+    }
+
+    public bool IsPlayerTurn()
+    {
+        return playerTurn;
+    }
+
+    public int GetFoodPoint()
+    {
+        return playerFoodPoint;
+    }
+
+    public void SetFoodPoint(int point)
+    {
+        playerFoodPoint = point;
     }
 }

@@ -8,14 +8,14 @@ public abstract class MovingObj : MonoBehaviour
     public LayerMask blockingMaskLayer;
 
     private BoxCollider2D boxCollider;
-    private Rigidbody2D rigidbody;
+    private Rigidbody2D ribd;
     private float inverseMoveTime;
 
     // Start is called before the first frame update
     protected virtual  void Start()
     {
         boxCollider = GetComponent<BoxCollider2D>();
-        rigidbody = GetComponent<Rigidbody2D>();
+        ribd = GetComponent<Rigidbody2D>();
         inverseMoveTime = 1f / moveTime; //类似单位间隔的移动速度
 
     }
@@ -28,8 +28,8 @@ public abstract class MovingObj : MonoBehaviour
 
         while (sqrRemainDis > float.Epsilon)
         {
-            Vector3 newPos = Vector3.MoveTowards(rigidbody.position, end, inverseMoveTime * Time.deltaTime);
-            rigidbody.MovePosition(new Vector2(newPos.x, newPos.y));
+            Vector3 newPos = Vector3.MoveTowards(ribd.position, end, inverseMoveTime * Time.deltaTime);
+            ribd.MovePosition(new Vector2(newPos.x, newPos.y));
             sqrRemainDis = (transform.position - end).sqrMagnitude;
 
             yield return null; //迭代器执行完一次，咱们这个就是为了位移，不需要返回什么实际值
