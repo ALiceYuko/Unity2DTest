@@ -13,4 +13,12 @@ public class Loader : MonoBehaviour
             Instantiate(gameMgr);
         }
     }
+
+    void Start()
+    {
+        if (GameMgr.g_GameMgr)
+        {
+            GameMgr.g_GameMgr.InitGame();
+        }
+    }
 }

@@ -15,6 +15,7 @@ public class Enemy : MovingObj
         Player player = component as Player;
         if (player)
         {
+            animator.SetTrigger("enemyAttack");
             player.LoseFood(playerDamage);
         }
     }
@@ -22,6 +23,7 @@ public class Enemy : MovingObj
     // Start is called before the first frame update
     protected override void Start()
     {
+        GameMgr.g_GameMgr.AddEnemyToList(this);
         animator = GetComponent<Animator>();
         target = GameObject.FindGameObjectWithTag("Player").transform;
         base.Start();
@@ -55,7 +57,5 @@ public class Enemy : MovingObj
         }
 
         AttempMove<Player>(xDir, yDir);
-
-        //GameMgr.g_GameMgr.TurnOnOrOffPlayerTurn(true);
     }
 }
