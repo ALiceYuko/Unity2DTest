@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Player : MovingObj
+public class PieceBoy : Piece
 {
-    public int wallDamage = 1;
     public int pointPerFood = 10;
     public int pointPerSoda = 20;
     public float restartLevelDelay = 1f;
@@ -36,12 +35,10 @@ public class Player : MovingObj
     //场景进入时进行赋值，保留上一次的结果
     protected override void Start()
     {
-        food = GameMgr.g_GameMgr.GetFoodPoint();
-
         base.Start();
     }
 
-    private void Awake()
+    protected void Awake()
     {
         animator = GetComponent<Animator>();
         inputCtrl = new PlayerCtrl();
@@ -49,13 +46,12 @@ public class Player : MovingObj
     }
 
     //场景销毁时，进入，将需要保存的变量存入单例
-    private void OnDisable()
+    protected void OnDisable()
     {
-        GameMgr.g_GameMgr.SetFoodPoint(food);
         inputCtrl.Disable();
     }
 
-    private void OnEnable()
+    protected void OnEnable()
     {
         inputCtrl.Enable();
     }
@@ -68,21 +64,17 @@ public class Player : MovingObj
             return;
         }
 
-
-        TryOnMovePlayer();
-
-        TryOnPlayerAttack();
     }
 
 
     /// /////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void CheckIfGameOver()
+    protected void CheckIfGameOver()
     {
         if(food <= 0)
         {
             GameMgr.g_GameMgr.GameOver();
-            animator.SetTrigger("PlayedDead");
+            animator.SetTrigger("BoyDead");
         }
     }
 
@@ -98,11 +90,7 @@ public class Player : MovingObj
 
     protected override void OnCanMove<T>(T component)
     {
-        Wall hitwall = component as Wall;
-        if (hitwall)
-        {
-            hitwall.DamageWall(wallDamage);
-        }
+
     }
 
     private void ReStart()
@@ -110,9 +98,9 @@ public class Player : MovingObj
         GameMgr.g_GameMgr.ReStart();
     }
 
-    public void LoseFood(int loss)
+    public void LoseHp(int loss)
     {
-        animator.SetTrigger("PlayerHited");
+        animator.SetTrigger("BoyHited");
         food -= loss;
         CheckIfGameOver();
     }
@@ -135,11 +123,5 @@ public class Player : MovingObj
             AttempMove<Wall>(hori, vert);
         }
     }
-
-    protected void TryOnPlayerAttack()
-    {
-
-    }
-
     
 }

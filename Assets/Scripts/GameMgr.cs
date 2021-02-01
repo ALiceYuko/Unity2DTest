@@ -9,14 +9,11 @@ public class GameMgr : MonoBehaviour
 
     public float turnDelay = 0.1f;
     public BoardMgr boardMgr;
-    public int playerFoodPoint = 100;
 
     //目前是个回合制游戏，Player和Enemy交替移动
     [HideInInspector] public bool playerTurn = true;
 
     private int level = 3;
-    private List<Enemy> enemies;
-    private bool enemiesMoving;
 
     // Start is called before the first frame update
     void Awake()
@@ -32,7 +29,6 @@ public class GameMgr : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
-        enemies = new List<Enemy>();
         boardMgr = GetComponent<BoardMgr>();
     }
 
@@ -40,7 +36,6 @@ public class GameMgr : MonoBehaviour
     {
         print("liufei in InitGame");
 
-        enemies.Clear();
         if (boardMgr)
         {
             boardMgr.SetupScene(level);
@@ -51,7 +46,7 @@ public class GameMgr : MonoBehaviour
 
     void Update()
     {
-        if (playerTurn || enemiesMoving)
+        if (playerTurn)
         {
             return;
         }
@@ -63,48 +58,44 @@ public class GameMgr : MonoBehaviour
     {
         print("liufei in ReStart");
 
-        enemies.Clear();
         //加载新关卡
         SceneManager.LoadScene("SampleScene");
     }
 
-    public void AddEnemyToList(Enemy enemy)
-    {
-        enemies.Add(enemy);
-    }
-
     IEnumerator MoveEnemies()
     {
-        enemiesMoving = true;
-        yield return new WaitForSeconds(turnDelay);
+        yield return null;
 
-        if (enemies.Count == 0)
-        {
-            yield return new WaitForSeconds(turnDelay);
-        }
+        //enemiesMoving = true;
+        //yield return new WaitForSeconds(turnDelay);
 
-        foreach( Enemy turn in enemies)
-        {
-            print("liufei in Move Enemy");
+        //if (enemies.Count == 0)
+        //{
+        //    yield return new WaitForSeconds(turnDelay);
+        //}
 
-            //一次动一个，排队慢慢动
-            if(turn)
-            {
-                turn.TryMoveEnemy();
-            }
-            else
-            {
-                playerTurn = true;
-                enemiesMoving = false;
-                yield break;
-            }
-            
-            yield return new WaitForSeconds(turn.moveTime);
-        }
+        //foreach( Enemy turn in enemies)
+        //{
+        //    print("liufei in Move Enemy");
 
-        //所有敌人挪完之后才是Player
-        playerTurn = true;
-        enemiesMoving = false;
+        //    //一次动一个，排队慢慢动
+        //    if(turn)
+        //    {
+        //        turn.TryMoveEnemy();
+        //    }
+        //    else
+        //    {
+        //        playerTurn = true;
+        //        enemiesMoving = false;
+        //        yield break;
+        //    }
+
+        //    yield return new WaitForSeconds(turn.moveTime);
+        //}
+
+        ////所有敌人挪完之后才是Player
+        //playerTurn = true;
+        //enemiesMoving = false;
     }
 
     public void GameOver()
@@ -122,13 +113,4 @@ public class GameMgr : MonoBehaviour
         return playerTurn;
     }
 
-    public int GetFoodPoint()
-    {
-        return playerFoodPoint;
-    }
-
-    public void SetFoodPoint(int point)
-    {
-        playerFoodPoint = point;
-    }
 }

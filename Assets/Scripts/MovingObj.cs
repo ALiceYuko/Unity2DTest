@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+
+可移动物体的基类 
+
+*/
 public abstract class MovingObj : MonoBehaviour
 {
     public float moveTime = 0.1f;
