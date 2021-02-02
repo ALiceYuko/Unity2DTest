@@ -2,16 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class PieceBoy : Piece
+//sealed禁止继承，类似于java final
+sealed public class PieceHero : Piece
 {
-    public int pointPerFood = 10;
-    public int pointPerSoda = 20;
     public float restartLevelDelay = 1f;
-
-    private Animator animator;
-    private int food;
-    private PlayerCtrl inputCtrl;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -22,12 +16,10 @@ public class PieceBoy : Piece
             enabled = false;
         } else if (collision.tag == "Food")
         {
-            food += pointPerFood;
             collision.gameObject.SetActive(false);
         }
         else if (collision.tag == "Soda")
         {
-            food += pointPerSoda;
             collision.gameObject.SetActive(false);
         }
     }
@@ -38,40 +30,39 @@ public class PieceBoy : Piece
         base.Start();
     }
 
-    protected void Awake()
+    protected override void Awake()
     {
-        animator = GetComponent<Animator>();
-        inputCtrl = new PlayerCtrl();
-        //可以绑定一些回调函数，执行某些Input反馈
+        base.Awake();
     }
 
     //场景销毁时，进入，将需要保存的变量存入单例
-    protected void OnDisable()
+    protected override void OnDisable()
     {
-        inputCtrl.Disable();
+        base.OnDisable();
     }
 
-    protected void OnEnable()
+    protected override void OnEnable()
     {
-        inputCtrl.Enable();
+        base.OnEnable();
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         if (GameMgr.g_GameMgr && !GameMgr.g_GameMgr.IsPlayerTurn())
         {
             return;
         }
 
+        base.Update();
     }
 
 
     /// /////////////////////////////////////////////////////////////////////////////////////////////
 
-    protected void CheckIfGameOver()
+    void CheckIfGameOver()
     {
-        if(food <= 0)
+        if(mainAttribute.IsDead())
         {
             GameMgr.g_GameMgr.GameOver();
             animator.SetTrigger("BoyDead");
@@ -80,7 +71,6 @@ public class PieceBoy : Piece
 
     protected override void AttempMove<T>(int xDir, int yDir)
     {
-        food--;
         base.AttempMove<T>(xDir, yDir);
 
         CheckIfGameOver();
@@ -101,11 +91,11 @@ public class PieceBoy : Piece
     public void LoseHp(int loss)
     {
         animator.SetTrigger("BoyHited");
-        food -= loss;
+        mainAttribute.Hurt(loss);
         CheckIfGameOver();
     }
 
-    protected void TryOnMovePlayer()
+    void TryOnMovePlayer()
     {
         Vector2 move = inputCtrl.Player.Move.ReadValue<Vector2>();
 

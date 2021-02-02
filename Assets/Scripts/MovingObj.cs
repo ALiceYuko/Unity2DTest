@@ -17,7 +17,7 @@ public abstract class MovingObj : MonoBehaviour
     private float inverseMoveTime;
 
     // Start is called before the first frame update
-    protected virtual  void Start()
+    protected virtual  void InitComponent()
     {
         boxCollider = GetComponent<BoxCollider2D>();
         ribd = GetComponent<Rigidbody2D>();
