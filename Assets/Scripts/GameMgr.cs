@@ -11,18 +11,51 @@ public class GameMgr : MonoBehaviour
     public BoardMgr boardMgr;
 
     //目前是个回合制游戏，Player和Enemy交替移动
-    [HideInInspector] public bool playerTurn = true;
+    [HideInInspector] private bool playerTurn = true;
+
+    public bool PlayerTurn
+    {
+        get;
+        set;
+    }
 
     private int level = 3;
+    /**
+     选中的棋子
+    */
+    private GameObject selected;
+
+    public GameObject Selected
+    {
+        get { return selected; }
+        set
+        {
+            if (selected != null)
+            {
+                selected.GetComponent<Piece>().Selected = false;
+            }
+            selected = value;
+
+            if (value != null)
+            {
+                value.GetComponent<Piece>().Selected = true;
+            }
+
+        }
+    }
+
+
+    /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     // Start is called before the first frame update
     void Awake()
     {
-        if(g_GameMgr == null)
+        if (g_GameMgr == null)
         {
             g_GameMgr = this;
         }
-        else if(g_GameMgr != this)
+        else if (g_GameMgr != this)
         {
             Destroy(gameObject);
             return;
@@ -102,15 +135,5 @@ public class GameMgr : MonoBehaviour
     {
         enabled = false;
     }
-
-    public void TurnOnOrOffPlayerTurn(bool bOn)
-    {
-        playerTurn = bOn;
-    }
-
-    public bool IsPlayerTurn()
-    {
-        return playerTurn;
-    }
-
 }
+

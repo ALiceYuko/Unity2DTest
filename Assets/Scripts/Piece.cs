@@ -15,6 +15,25 @@ public class Piece : MovingObj
     protected Animator animator;
     protected PlayerCtrl inputCtrl;
 
+    private bool selected;
+    public bool Selected
+    {
+        get { return selected; }
+        set
+        {
+            Debug.Log("selected: " + value);
+            if (selected == value)
+            {
+                return;
+            }
+            selected = value;
+
+
+            //float outlineEnabled = value ? 1 : 0;
+            //outlineMaterial.SetFloat(keyOutlineEnabled, outlineEnabled);
+        }
+    }
+
     // Start is called before the first frame update
     //场景进入时进行赋值，保留上一次的结果
     protected virtual void Start()
@@ -47,6 +66,7 @@ public class Piece : MovingObj
     }
 
 
+
     /// /////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -54,5 +74,4 @@ public class Piece : MovingObj
     {
         
     }
-    
 }

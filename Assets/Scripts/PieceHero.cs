@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+
 
 //sealed禁止继承，类似于java final
-sealed public class PieceHero : Piece
+sealed public class PieceHero : Piece, IPointerClickHandler
 {
     public float restartLevelDelay = 1f;
 
@@ -49,7 +51,7 @@ sealed public class PieceHero : Piece
     // Update is called once per frame
     protected override void Update()
     {
-        if (GameMgr.g_GameMgr && !GameMgr.g_GameMgr.IsPlayerTurn())
+        if (GameMgr.g_GameMgr && !GameMgr.g_GameMgr.PlayerTurn)
         {
             return;
         }
@@ -75,7 +77,7 @@ sealed public class PieceHero : Piece
 
         CheckIfGameOver();
 
-        GameMgr.g_GameMgr.TurnOnOrOffPlayerTurn(false);
+        GameMgr.g_GameMgr.PlayerTurn = false;
     }
 
     protected override void OnCanMove<T>(T component)
@@ -113,5 +115,9 @@ sealed public class PieceHero : Piece
             AttempMove<Wall>(hori, vert);
         }
     }
-    
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
+    }
 }
