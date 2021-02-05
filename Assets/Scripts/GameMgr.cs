@@ -44,7 +44,6 @@ public class GameMgr : MonoBehaviour
         }
     }
 
-
     /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -98,42 +97,16 @@ public class GameMgr : MonoBehaviour
     IEnumerator MoveEnemies()
     {
         yield return null;
-
-        //enemiesMoving = true;
-        //yield return new WaitForSeconds(turnDelay);
-
-        //if (enemies.Count == 0)
-        //{
-        //    yield return new WaitForSeconds(turnDelay);
-        //}
-
-        //foreach( Enemy turn in enemies)
-        //{
-        //    print("liufei in Move Enemy");
-
-        //    //一次动一个，排队慢慢动
-        //    if(turn)
-        //    {
-        //        turn.TryMoveEnemy();
-        //    }
-        //    else
-        //    {
-        //        playerTurn = true;
-        //        enemiesMoving = false;
-        //        yield break;
-        //    }
-
-        //    yield return new WaitForSeconds(turn.moveTime);
-        //}
-
-        ////所有敌人挪完之后才是Player
-        //playerTurn = true;
-        //enemiesMoving = false;
     }
 
     public void GameOver()
     {
         enabled = false;
+    }
+
+    public void ShowMoveRange()
+    {
+
     }
 }
 

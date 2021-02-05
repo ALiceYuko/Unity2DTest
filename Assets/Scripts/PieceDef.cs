@@ -33,3 +33,10 @@ public class PBMoveConfig
     public int moveRange;
     public int attackRange;
 }
+
+public enum eTeamType
+{
+    TEAM_OWNER,
+    TEAM_ENEMY,
+    TEAM_FRIENDLY
+}

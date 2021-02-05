@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 using OwnerTeamID=System.Int32;
 
@@ -10,10 +11,11 @@ public class Piece : MovingObj
 {
     public PBMainAttribute mainAttribute;
     public PBMoveConfig moveConfig;
-    public OwnerTeamID teamID;
+    public eTeamType teamType;
 
     protected Animator animator;
     protected PlayerCtrl inputCtrl;
+    protected Material materialSprite;
 
     private bool selected;
     public bool Selected
@@ -34,6 +36,26 @@ public class Piece : MovingObj
         }
     }
 
+    /**
+   轮廓线开关key
+   */
+    protected const string keyOutlineEnabled = "_OutlineEnabled";
+
+    /**
+    轮廓线颜色key
+    */
+    protected const string keyOutlineColor = "_SolidOutline";
+
+    //轮廓线颜色
+    private Color enemyHoverColor = new Color(1, 0, 0, 0.5f);
+    private Color enemySelectedColor = new Color(1, 0.92f, 0.016f, 0.5f);
+    private Color hoverColor = new Color(0, 1, 0, 0.5f);
+    private Color selectedColor = new Color(1, 1, 1, 0.5f);
+    private Dictionary<eTeamType, Color> dictHoverColor = new Dictionary<eTeamType, Color>();
+    private Dictionary<eTeamType, Color> dictSelectColor = new Dictionary<eTeamType, Color>();
+
+    /// ///////////////////////////////////////////////////////////////////////////////////////////
+
     // Start is called before the first frame update
     //场景进入时进行赋值，保留上一次的结果
     protected virtual void Start()
@@ -45,6 +67,15 @@ public class Piece : MovingObj
     {
         animator = GetComponent<Animator>();
         inputCtrl = new PlayerCtrl();
+
+        materialSprite = GetComponent<SpriteRenderer>().material;
+
+        dictHoverColor.Add(eTeamType.TEAM_OWNER, hoverColor);
+        dictHoverColor.Add(eTeamType.TEAM_ENEMY, enemyHoverColor);
+
+        dictSelectColor.Add(eTeamType.TEAM_OWNER, selectedColor);
+        dictSelectColor.Add(eTeamType.TEAM_ENEMY, enemySelectedColor);
+
         base.InitComponent();
     }
 
@@ -65,7 +96,48 @@ public class Piece : MovingObj
 
     }
 
+    protected void OnBasePointerClick(PointerEventData eventData)
+    {
+        GameMgr.g_GameMgr.Selected = this.gameObject;
+        GameMgr.g_GameMgr.ShowMoveRange();
+    }
 
+    protected void OnBasePointerEnter(PointerEventData eventData)
+    {
+        Color curColor = materialSprite.GetColor(keyOutlineColor);
+
+        if(dictHoverColor.ContainsKey(teamType))
+        {
+            Color hoverColor = dictHoverColor[teamType];
+            if(curColor != hoverColor)
+            {
+                materialSprite.SetColor(keyOutlineColor, hoverColor);
+            }
+        }
+     
+        materialSprite.SetFloat(keyOutlineEnabled, 1.0f);
+    }
+
+    protected void OnBasePointerExit(PointerEventData eventData)
+    {
+        if (selected)
+        {
+            Color curColor = materialSprite.GetColor(keyOutlineColor);
+
+            if (dictSelectColor.ContainsKey(teamType))
+            {
+                Color selectColor = dictSelectColor[teamType];
+                if (curColor != selectColor)
+                {
+                    materialSprite.SetColor(keyOutlineColor, selectColor);
+                }
+            }
+
+        }else
+        {
+            materialSprite.SetFloat(keyOutlineEnabled, 0);
+        }
+    }
 
     /// /////////////////////////////////////////////////////////////////////////////////////////////
 

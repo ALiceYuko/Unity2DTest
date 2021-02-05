@@ -106,8 +106,8 @@ public class BoardMgr : MonoBehaviour
         LayoutObjsRandom(foodObjs, foodCount.minNum, foodCount.maxNum);
 
         //根据等级调整敌人数目
-        int enemyCount = (int)Math.Log(level, 2);
-        LayoutObjsRandom(enemyObjs, enemyCount, enemyCount);
+        //int enemyCount = (int)Math.Log(level, 2);
+        //LayoutObjsRandom(enemyObjs, enemyCount, enemyCount);
         Instantiate(exitObj, new Vector3(cols - 1, rows - 1), Quaternion.identity);
     }
 

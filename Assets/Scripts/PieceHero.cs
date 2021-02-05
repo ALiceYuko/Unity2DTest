@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 
 //sealed禁止继承，类似于java final
-sealed public class PieceHero : Piece, IPointerClickHandler
+sealed public class PieceHero : Piece, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public float restartLevelDelay = 1f;
 
@@ -116,8 +116,18 @@ sealed public class PieceHero : Piece, IPointerClickHandler
         }
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public  void OnPointerClick(PointerEventData eventData)
     {
-        throw new System.NotImplementedException();
+        base.OnBasePointerClick(eventData);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        base.OnBasePointerEnter(eventData);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        base.OnBasePointerExit(eventData);
     }
 }
